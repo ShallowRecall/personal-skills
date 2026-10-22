@@ -1,8 +1,8 @@
 {
   "name": "shallowrecall-personal-skills",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
-  "description": "Personal Codex skills for evidence-backed career notes and resume tailoring",
+  "description": "Public Agent Skills for evidence-backed career notes and resume tailoring",
   "license": "MIT",
   "engines": {
     "node": ">=18"
@@ -27,6 +27,7 @@
     "agent-skills",
     "career",
     "resume",
-    "obsidian"
+    "obsidian",
+    "career-vault"
   ]
 }
