@@ -9,6 +9,22 @@ description: Create job-description-targeted resume versions from an evidence-ba
 
 Turn an evidence-backed career vault into a focused resume version for a specific role. Optimize for relevance and credibility, not for listing every technology the user has touched.
 
+## Bundled Tools
+
+Use the bundled tools when available:
+
+- `scripts/score_jd.py` — rank project notes against the JD with a transparent heuristic.
+- `references/resume-rubric.md` — scoring dimensions, bullet quality, and output constraints.
+- `references/job-family-profiles.md` — backend, payment, platform, agent, and modernization profiles.
+- `assets/resume-templates/resume-zh.md` — Chinese resume starter.
+- `assets/resume-templates/resume-en.md` — English resume starter.
+
+Example:
+
+```bash
+python -X utf8 scripts/score_jd.py --vault <career-vault> --jd-file <jd.md> --json
+```
+
 ## Resolve the Career Vault
 
 Use the first path that applies:
@@ -33,7 +49,7 @@ Then read only the project cases relevant to the JD.
 
 ### 1. Parse the JD
 
-Extract:
+Run `scripts/score_jd.py` first when it is available. Treat the score as a ranking aid, not a decision maker. Extract:
 
 - hard skills and technologies;
 - business domain;
@@ -111,7 +127,17 @@ Examples of gaps that require user confirmation:
 - incident ownership;
 - performance improvement percentages.
 
-### 6. Save the Output
+### 6. Validate the Output
+
+Run the career-note validator when available:
+
+```bash
+python -X utf8 ../career-evidence-miner/scripts/validate_career_notes.py --vault <career-vault>
+```
+
+Check that every bullet has an evidence marker, every numeric claim has a source, and the selected project set follows `references/resume-rubric.md`.
+
+### 7. Save the Output
 
 Create a new note under the career vault's resume versions directory. If it does not exist, ask before creating a new top-level structure.
 

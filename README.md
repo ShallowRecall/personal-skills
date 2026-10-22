@@ -23,6 +23,8 @@ Skills 只包含工作流、约束和输出规范，不包含个人简历数据�
 - **路径可配置**：通过 `CAREER_VAULT` 或显式路径指定职业资产库。
 - **多 Agent 安装**：基于 `skills` CLI，可安装到 Codex、Claude Code 等 Agent。
 - **本地优先**：职业资产留在本地，Skill 不上传个人数据。
+- **内置工具**：仓库扫描、职业笔记校验、JD 项目评分和 Skill 结构校验。
+- **可测试**：包含单元测试与 GitHub Actions。
 
 ## Skills
 
@@ -85,20 +87,95 @@ Skills 只包含工作流、约束和输出规范，不包含个人简历数据�
 ```text
 personal-skills/
 ├─ README.md
+├─ CHANGELOG.md
 ├─ LICENSE
 ├─ package.json
+├─ .github/workflows/checks.yml
 ├─ scripts/
-│  └─ link-local.ps1
+│  ├─ link-local.ps1
+│  └─ validate_skills.py
+├─ tests/
+│  ├─ test_scan_repo.py
+│  ├─ test_score_jd.py
+│  ├─ test_skill_structure.py
+│  └─ test_validate_notes.py
 └─ skills/
    ├─ career-evidence-miner/
    │  ├─ SKILL.md
-   │  └─ agents/openai.yaml
+   │  ├─ agents/openai.yaml
+   │  ├─ scripts/
+   │  │  ├─ scan_repo.py
+   │  │  └─ validate_career_notes.py
+   │  ├─ references/
+   │  │  ├─ evidence-schema.md
+   │  │  └─ project-case-template.md
+   │  └─ assets/obsidian-templates/project-case.md
    └─ resume-tailor/
       ├─ SKILL.md
-      └─ agents/openai.yaml
+      ├─ agents/openai.yaml
+      ├─ scripts/score_jd.py
+      ├─ references/
+      │  ├─ resume-rubric.md
+      │  └─ job-family-profiles.md
+      └─ assets/resume-templates/
+         ├─ resume-zh.md
+         └─ resume-en.md
 ```
 
 每个 Skill 都是独立目录，包含必需的 `SKILL.md`。`agents/openai.yaml` 用于配置展示名称、短描述和隐式调用策略。
+
+## 内置工具
+
+### 仓库扫描
+
+```bash
+python -X utf8 skills/career-evidence-miner/scripts/scan_repo.py --repo D:\workspace\project --json
+```
+
+输出仓库 HEAD、作者提交数、时间范围、近期提交、README 标题、设计文档、文件统计和测试文件，作为证据采集的起点。
+
+### 职业笔记校验
+
+```bash
+python -X utf8 skills/career-evidence-miner/scripts/validate_career_notes.py --vault D:\career-vault
+```
+
+检查：
+
+- 断开的 wikilink 和相对链接。
+- 可能的 Token、密码和私钥。
+- 项目笔记是否缺少 Evidence/Sources 章节。
+- 简历 bullet 是否缺少证据标记。
+- 数字型成果是否有来源。
+
+准备投递版本时使用：
+
+```bash
+python -X utf8 skills/career-evidence-miner/scripts/validate_career_notes.py --vault D:\career-vault --strict
+```
+
+### JD 项目评分
+
+```bash
+python -X utf8 skills/resume-tailor/scripts/score_jd.py --vault D:\career-vault --jd-file JD.md --json
+```
+
+评分是透明启发式，不是自动决策：
+
+- JD 关键词覆盖 50%
+- 证据强度 25%
+- Ownership 清晰度 15%
+- 新鲜度 10%
+
+输出会给出主项目、辅项目、匹配词和缺口词。
+
+### Skill 结构校验
+
+```bash
+python -X utf8 scripts/validate_skills.py
+```
+
+检查 frontmatter、名称、描述、文件夹一致性和未完成占位符。
 
 ## 环境要求
 
@@ -274,7 +351,16 @@ Codex 支持 symlink/junction 形式的 Skill 目录。修改后如果未生效�
 ## 验证
 
 ```bash
-npx skills add . --list
+npm run validate:skills
+npm test
+npm run check
+```
+
+`npm run check` 会执行 Skill 结构校验、单元测试和 `npx skills add . --list`。
+
+从 GitHub 验证：
+
+```bash
 npx skills add ShallowRecall/personal-skills --list
 ```
 
@@ -329,7 +415,7 @@ Skill 需要知道职业资产库的位置，但不应硬编码某台机器的�
 
 ## 版本与贡献
 
-当前版本：`1.0.2`
+当前版本：`1.1.0`
 
 欢迎提交新的职业资产模板、证据提取规则、简历写作模式、跨 Agent 安装与验证改进。
 

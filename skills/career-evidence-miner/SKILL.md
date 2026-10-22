@@ -9,6 +9,23 @@ description: Turn local project repositories, Git history, design documents, and
 
 Build a durable career asset library from verifiable local work. Preserve the design decisions, constraints, trade-offs, and evidence that make a project credible in a resume or interview.
 
+## Bundled Tools
+
+Use the bundled tools when available:
+
+- `scripts/scan_repo.py` — collect Git, README, docs, file counts, tests, and recent commit evidence as JSON.
+- `scripts/validate_career_notes.py` — check broken links, secrets, missing evidence sections, and unsupported numeric resume claims.
+- `references/evidence-schema.md` — evidence IDs, frontmatter schema, and claim mapping.
+- `references/project-case-template.md` — standard project case structure.
+- `assets/obsidian-templates/project-case.md` — Obsidian note starter.
+
+Example:
+
+```bash
+python -X utf8 scripts/scan_repo.py --repo <repo> --json
+python -X utf8 scripts/validate_career_notes.py --vault <career-vault>
+```
+
 ## Resolve the Career Vault
 
 Use the first path that applies:
@@ -57,6 +74,8 @@ Identify:
 Do not inspect unrelated private repositories.
 
 ### 2. Inventory the Evidence
+
+Prefer running `scripts/scan_repo.py` first and use its JSON as the evidence index. Read the key files it points to; do not treat the scan as proof by itself.
 
 For each repository:
 
@@ -113,7 +132,17 @@ Update the evidence ledger with:
 - current HEAD;
 - items still needing user confirmation.
 
-### 5. Keep the Vault Coherent
+### 5. Validate Before Finishing
+
+Run:
+
+```bash
+python -X utf8 scripts/validate_career_notes.py --vault <career-vault>
+```
+
+Fix errors. Review warnings; use `--strict` when the note will feed a resume release.
+
+### 6. Keep the Vault Coherent
 
 - Add links to related notes.
 - Update the index when creating a new top-level note.
