@@ -13,9 +13,12 @@ Turn an evidence-backed career vault into a focused resume version for a specifi
 
 Use the bundled tools when available:
 
-- `scripts/score_jd.py` — rank project notes against the JD with a transparent heuristic.
+- `scripts/score_jd.py` — rank project notes with JD keywords, profile weights, lexical similarity, evidence strength, ownership, and recency.
+- `scripts/render_resume.py` — assemble an evidence-marked Chinese or English resume with page estimation.
+- `scripts/generate_star_stories.py` — generate an evidence-linked STAR story scaffold from a project note.
 - `references/resume-rubric.md` — scoring dimensions, bullet quality, and output constraints.
-- `references/job-family-profiles.md` — backend, payment, platform, agent, and modernization profiles.
+- `references/job-family-profiles.md` and `.json` — backend, payment, platform, agent, and modernization profiles.
+- `references/interview-mode.md` — interview story workflow.
 - `assets/resume-templates/resume-zh.md` — Chinese resume starter.
 - `assets/resume-templates/resume-en.md` — English resume starter.
 
@@ -23,6 +26,8 @@ Example:
 
 ```bash
 python -X utf8 scripts/score_jd.py --vault <career-vault> --jd-file <jd.md> --json
+python -X utf8 scripts/render_resume.py --vault <career-vault> --jd-file <jd.md> --language zh --max-pages 1
+python -X utf8 scripts/generate_star_stories.py --vault <career-vault> --project <project>
 ```
 
 ## Resolve the Career Vault
@@ -34,6 +39,8 @@ Use the first path that applies:
 3. If neither is available, ask the user for the vault path before writing.
 
 Do not assume a machine-specific default.
+
+Multiple vaults can be supplied with repeated `--vault` flags or a `career-vault.yaml` file. Use `private_globs` to exclude private notes unless the user opts in.
 
 Read these notes first when present:
 

@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.2.0 — 2026-10-22
+
+### Added
+
+- `import-resume` Skill for bootstrapping a career vault from an old resume.
+- Multi-vault configuration via `career-vault.yaml` and repeated `--vault`.
+- Private file patterns and `--include-private`.
+- Evidence ID validation, duplicate detection, and unknown-reference checks.
+- `capture_agent_session.py` for Trellis and Agent workspace artifacts.
+- `migrate_vault.py` for adding project IDs, evidence IDs, and resume markers to existing notes.
+- `render_resume.py` for evidence-marked Chinese/English resume output.
+- `generate_star_stories.py` for Interview Mode.
+- Profile-aware JD scoring with lexical similarity and ATS keyword coverage.
+- New tests for config, import, rendering, STAR stories, session capture, and evidence IDs.
+
+### Changed
+
+- `score_jd.py` now uses job-family weights and semantic similarity.
+- README expanded with the third Skill, multi-vault configuration, and new tools.
+
+
 ## 1.1.0 — 2026-10-22
 
 ### Added

@@ -1,6 +1,6 @@
 {
   "name": "shallowrecall-personal-skills",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": false,
   "description": "Public Agent Skills for evidence-backed career notes and resume tailoring",
   "license": "MIT",
@@ -18,7 +18,12 @@
     "score:jd": "python -X utf8 skills/resume-tailor/scripts/score_jd.py",
     "validate:skills": "python -X utf8 scripts/validate_skills.py",
     "test": "python -X utf8 -m unittest discover -s tests -v",
-    "check": "npm run validate:skills && npm run test && npx --yes skills add . --list"
+    "check": "npm run validate:skills && npm run test && npx --yes skills add . --list",
+    "install:import-resume": "npx --yes skills add . --skill import-resume -a codex -g -y",
+    "capture:session": "python -X utf8 skills/career-evidence-miner/scripts/capture_agent_session.py",
+    "render:resume": "python -X utf8 skills/resume-tailor/scripts/render_resume.py",
+    "star:story": "python -X utf8 skills/resume-tailor/scripts/generate_star_stories.py",
+    "import:resume": "python -X utf8 skills/import-resume/scripts/import_resume.py"
   },
   "repository": {
     "type": "git",

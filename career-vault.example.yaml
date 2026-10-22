@@ -1,0 +1,17 @@
+# Example multi-vault career configuration.
+vaults:
+  - path: "D:\\work\\career-vault"
+    name: main
+  - path: "D:\\work\\private-career-vault"
+    name: private
+ignore_globs:
+  - ".obsidian/**"
+  - "node_modules/**"
+  - ".tmp/**"
+private_globs:
+  - "private/**"
+  - "**/*.private.md"
+resume:
+  language: zh-CN
+  max_pages: 1
+  job_family: backend

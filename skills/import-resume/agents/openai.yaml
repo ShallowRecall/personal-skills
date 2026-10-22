@@ -1,0 +1,5 @@
+interface:
+  display_name: "Import Resume"
+  short_description: "Bootstrap a career vault from an existing resume"
+policy:
+  allow_implicit_invocation: true

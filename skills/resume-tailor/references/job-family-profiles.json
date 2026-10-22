@@ -1,0 +1,125 @@
+{
+  "backend": {
+    "label": "Java Backend",
+    "keywords": [
+      "java",
+      "spring",
+      "spring boot",
+      "spring cloud",
+      "nacos",
+      "dubbo",
+      "mybatis",
+      "postgresql",
+      "mysql",
+      "redis",
+      "rocketmq",
+      "microservice",
+      "oauth2",
+      "jwt",
+      "transaction",
+      "idempotency",
+      "observability"
+    ],
+    "weights": {
+      "coverage": 0.45,
+      "semantic": 0.15,
+      "evidence": 0.2,
+      "ownership": 0.1,
+      "recency": 0.1
+    }
+  },
+  "payment": {
+    "label": "Payment / Trading",
+    "keywords": [
+      "payment",
+      "pay",
+      "subscription",
+      "order",
+      "inventory",
+      "transaction",
+      "idempotency",
+      "webhook",
+      "refund",
+      "apple",
+      "google play",
+      "useepay",
+      "redis",
+      "rocketmq",
+      "java"
+    ],
+    "weights": {
+      "coverage": 0.45,
+      "semantic": 0.15,
+      "evidence": 0.2,
+      "ownership": 0.1,
+      "recency": 0.1
+    }
+  },
+  "platform": {
+    "label": "Platform Engineering",
+    "keywords": [
+      "platform",
+      "tool",
+      "toolchain",
+      "code generation",
+      "ci/cd",
+      "testing",
+      "observability",
+      "developer experience",
+      "template",
+      "automation",
+      "release"
+    ],
+    "weights": {
+      "coverage": 0.45,
+      "semantic": 0.15,
+      "evidence": 0.2,
+      "ownership": 0.1,
+      "recency": 0.1
+    }
+  },
+  "agent": {
+    "label": "Agent Engineering",
+    "keywords": [
+      "agent",
+      "skill",
+      "mcp",
+      "tool",
+      "context",
+      "multi-agent",
+      "evaluation",
+      "guardrail",
+      "automation"
+    ],
+    "weights": {
+      "coverage": 0.45,
+      "semantic": 0.15,
+      "evidence": 0.2,
+      "ownership": 0.1,
+      "recency": 0.1
+    }
+  },
+  "fullstack": {
+    "label": "Full-stack / Modernization",
+    "keywords": [
+      "react",
+      "vue",
+      "typescript",
+      "java",
+      "spring boot",
+      "packaging",
+      "migration",
+      "compatibility",
+      "legacy",
+      "frontend",
+      "backend"
+    ],
+    "weights": {
+      "coverage": 0.45,
+      "semantic": 0.15,
+      "evidence": 0.2,
+      "ownership": 0.1,
+      "recency": 0.1
+    }
+  }
+}

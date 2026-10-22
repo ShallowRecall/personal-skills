@@ -14,16 +14,20 @@ Build a durable career asset library from verifiable local work. Preserve the de
 Use the bundled tools when available:
 
 - `scripts/scan_repo.py` — collect Git, README, docs, file counts, tests, and recent commit evidence as JSON.
-- `scripts/validate_career_notes.py` — check broken links, secrets, missing evidence sections, and unsupported numeric resume claims.
+- `scripts/validate_career_notes.py` — check broken links, secrets, missing evidence sections, duplicate/unknown evidence IDs, and unsupported numeric resume claims.
+- `scripts/capture_agent_session.py` — capture Trellis task/workspace files, Agent skills, changed files, and diff stats.
+- `scripts/migrate_vault.py` — add missing project IDs, evidence IDs, and resume markers to an existing vault.
 - `references/evidence-schema.md` — evidence IDs, frontmatter schema, and claim mapping.
 - `references/project-case-template.md` — standard project case structure.
 - `assets/obsidian-templates/project-case.md` — Obsidian note starter.
+- `assets/career-vault.example.yaml` — multi-vault and private-pattern configuration example.
 
 Example:
 
 ```bash
 python -X utf8 scripts/scan_repo.py --repo <repo> --json
 python -X utf8 scripts/validate_career_notes.py --vault <career-vault>
+python -X utf8 scripts/capture_agent_session.py --root <workspace> --json
 ```
 
 ## Resolve the Career Vault
@@ -33,6 +37,8 @@ Use the first path that applies:
 1. A path explicitly provided by the user.
 2. The `CAREER_VAULT` environment variable.
 3. If neither is available, ask the user for the vault path before writing.
+
+For multiple vaults, pass `--vault` more than once or provide a `career-vault.yaml` with a `vaults` list. Use `private_globs` to exclude private notes by default.
 
 Do not assume a machine-specific default.
 
@@ -138,6 +144,7 @@ Run:
 
 ```bash
 python -X utf8 scripts/validate_career_notes.py --vault <career-vault>
+python -X utf8 scripts/capture_agent_session.py --root <workspace> --json
 ```
 
 Fix errors. Review warnings; use `--strict` when the note will feed a resume release.

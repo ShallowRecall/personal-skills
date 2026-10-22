@@ -8,10 +8,11 @@
 
 ## 项目简介
 
-这个仓库提供两套可复用的 Agent Skills：
+这个仓库提供三套可复用的 Agent Skills：
 
 - `career-evidence-miner`：从本地仓库、提交、设计文档和 Agent 工作产物中提取项目亮点，写入 Markdown / Obsidian 职业资产库。
 - `resume-tailor`：读取职业资产库，根据目标 JD 生成可追溯的简历、证据映射和差距清单。
+- `import-resume`：把旧简历导入为待确认的草稿项目笔记，再逐步补充真实证据。
 
 Skills 只包含工作流、约束和输出规范，不包含个人简历数据，也不会主动上传 Vault 或项目代码。
 
@@ -20,11 +21,11 @@ Skills 只包含工作流、约束和输出规范，不包含个人简历数据�
 - **证据驱动**：强结论必须能指向源码、提交、测试或设计文档。
 - **拒绝编造**：不虚构用户量、QPS、营收、转化率、团队规模和效率提升。
 - **Obsidian 友好**：输出 Markdown，支持 frontmatter、wikilink、表格和 callout。
-- **路径可配置**：通过 `CAREER_VAULT` 或显式路径指定职业资产库。
+- **路径可配置**：通过 `CAREER_VAULT`、显式路径或 `career-vault.yaml` 配置单/多 Vault。
 - **多 Agent 安装**：基于 `skills` CLI，可安装到 Codex、Claude Code 等 Agent。
 - **本地优先**：职业资产留在本地，Skill 不上传个人数据。
-- **内置工具**：仓库扫描、职业笔记校验、JD 项目评分和 Skill 结构校验。
-- **可测试**：包含单元测试与 GitHub Actions。
+- **内置工具**：仓库扫描、Agent 会话采集、证据 ID 校验、JD 评分、简历渲染和 STAR 生成。
+- **可测试**：包含 12 个单元测试与 GitHub Actions。
 
 ## Skills
 
@@ -82,12 +83,36 @@ Skills 只包含工作流、约束和输出规范，不包含个人简历数据�
 - 把课程项目或 Demo 包装成生产系统。
 - 没有证据却使用“主导”“负责人”“架构师”等措辞。
 
+### import-resume
+
+把旧简历转换为待确认的职业资产草稿。
+
+**适合：**
+
+- 第一次建立职业资产库，但只有旧简历。
+- 把历史项目快速拆成可整理的项目条目。
+- 从旧版中英文简历中恢复项目、技能和成果描述。
+- 需要明确区分“简历上写过”和“有证据支持”。
+
+**主要输出：**
+
+- `type: imported-resume` 的草稿项目笔记。
+- 原始 claims 和 `[needs confirmation]` 标记。
+- 证据缺口清单。
+- 下一步补证建议。
+
+**不适用：**
+
+- 直接把旧简历当成真实证据。
+- 自动确认工作年限、团队规模或业务指标。
+
 ## 仓库结构
 
 ```text
 personal-skills/
 ├─ README.md
 ├─ CHANGELOG.md
+├─ career-vault.example.yaml
 ├─ LICENSE
 ├─ package.json
 ├─ .github/workflows/checks.yml
@@ -95,33 +120,56 @@ personal-skills/
 │  ├─ link-local.ps1
 │  └─ validate_skills.py
 ├─ tests/
+│  ├─ test_capture_agent_session.py
+│  ├─ test_import_resume.py
+│  ├─ test_migrate_vault.py
+│  ├─ test_render_resume.py
 │  ├─ test_scan_repo.py
 │  ├─ test_score_jd.py
 │  ├─ test_skill_structure.py
-│  └─ test_validate_notes.py
+│  ├─ test_star_story.py
+│  ├─ test_validate_notes.py
+│  ├─ test_validator_evidence_ids.py
+│  └─ test_vault_config.py
 └─ skills/
    ├─ career-evidence-miner/
    │  ├─ SKILL.md
    │  ├─ agents/openai.yaml
    │  ├─ scripts/
+   │  │  ├─ capture_agent_session.py
    │  │  ├─ scan_repo.py
-   │  │  └─ validate_career_notes.py
+   │  │  ├─ validate_career_notes.py
+   │  │  └─ vault_config.py
    │  ├─ references/
    │  │  ├─ evidence-schema.md
    │  │  └─ project-case-template.md
-   │  └─ assets/obsidian-templates/project-case.md
-   └─ resume-tailor/
+   │  └─ assets/
+   │     ├─ career-vault.example.yaml
+   │     └─ obsidian-templates/project-case.md
+   ├─ resume-tailor/
+   │  ├─ SKILL.md
+   │  ├─ agents/openai.yaml
+   │  ├─ scripts/
+   │  │  ├─ generate_star_stories.py
+   │  │  ├─ render_resume.py
+   │  │  ├─ score_jd.py
+   │  │  └─ vault_config.py
+   │  ├─ references/
+   │  │  ├─ interview-mode.md
+   │  │  ├─ job-family-profiles.json
+   │  │  ├─ job-family-profiles.md
+   │  │  └─ resume-rubric.md
+   │  └─ assets/resume-templates/
+   │     ├─ resume-zh.md
+   │     └─ resume-en.md
+   └─ import-resume/
       ├─ SKILL.md
       ├─ agents/openai.yaml
-      ├─ scripts/score_jd.py
-      ├─ references/
-      │  ├─ resume-rubric.md
-      │  └─ job-family-profiles.md
-      └─ assets/resume-templates/
-         ├─ resume-zh.md
-         └─ resume-en.md
+      ├─ scripts/
+      │  ├─ import_resume.py
+      │  └─ vault_config.py
+      └─ references/import-workflow.md
 ```
-
 每个 Skill 都是独立目录，包含必需的 `SKILL.md`。`agents/openai.yaml` 用于配置展示名称、短描述和隐式调用策略。
 
 ## 内置工具
@@ -154,20 +202,69 @@ python -X utf8 skills/career-evidence-miner/scripts/validate_career_notes.py --v
 python -X utf8 skills/career-evidence-miner/scripts/validate_career_notes.py --vault D:\career-vault --strict
 ```
 
+
+### Vault 证据迁移
+
+```bash
+python -X utf8 skills/career-evidence-miner/scripts/migrate_vault.py --vault D:\career-vault
+python -X utf8 skills/career-evidence-miner/scripts/migrate_vault.py --vault D:\career-vault --apply
+```
+
+第一次为 dry-run。确认后加 `--apply`：
+
+- 给项目笔记补 `project_id`、`last_verified`、`evidence_level`。
+- 给 Evidence 章节的 bullet 分配唯一 Evidence ID。
+- 给简历 bullet 追加 `evidence: EV-...`。
+- 不覆盖已有 Evidence ID。
+
 ### JD 项目评分
 
 ```bash
 python -X utf8 skills/resume-tailor/scripts/score_jd.py --vault D:\career-vault --jd-file JD.md --json
 ```
 
-评分是透明启发式，不是自动决策：
+评分是透明启发式，不是自动决策。默认权重：
 
-- JD 关键词覆盖 50%
-- 证据强度 25%
-- Ownership 清晰度 15%
+- JD 关键词覆盖 45%
+- 词汇语义相似度 15%
+- 证据强度 20%
+- Ownership 清晰度 10%
 - 新鲜度 10%
 
-输出会给出主项目、辅项目、匹配词和缺口词。
+脚本会读取岗位族配置，自动识别 `backend`、`payment`、`platform`、`agent`、`fullstack`，输出主项目、辅项目、匹配词、缺口词和 ATS 关键词覆盖。
+
+
+### Agent 会话采集
+
+```bash
+python -X utf8 skills/career-evidence-miner/scripts/capture_agent_session.py --root D:\workspace\project --json
+```
+
+采集 Trellis 任务、workspace 记录、Agent Skill、变更文件和 diff 统计。它不读取私人对话正文。
+
+### 简历渲染
+
+```bash
+python -X utf8 skills/resume-tailor/scripts/render_resume.py --vault D:\career-vault --jd-file JD.md --language zh --max-pages 1
+```
+
+从排名靠前的项目笔记中提取 evidence-marked bullets，生成中文或英文 Markdown 简历，并估算页数。
+
+### Interview Mode
+
+```bash
+python -X utf8 skills/resume-tailor/scripts/generate_star_stories.py --vault D:\career-vault --project "Cerberus 订阅与支付链路"
+```
+
+生成带 Evidence ID 的 STAR 故事骨架。所有 `[待确认]` 内容必须人工核对。
+
+### 旧简历导入
+
+```bash
+python -X utf8 skills/import-resume/scripts/import_resume.py --resume old-resume.md --vault D:\career-vault
+```
+
+生成 `type: imported-resume` 的待确认草稿，不会把旧简历当作真实证据。
 
 ### Skill 结构校验
 
@@ -208,6 +305,10 @@ npx skills add ShallowRecall/personal-skills --skill career-evidence-miner -a co
 npx skills add ShallowRecall/personal-skills --skill resume-tailor -a codex -g -y
 ```
 
+```bash
+npx skills add ShallowRecall/personal-skills --skill import-resume -a codex -g -y
+```
+
 ### 安装全部 Skills
 
 ```bash
@@ -234,6 +335,7 @@ npx skills add ShallowRecall/personal-skills --skill career-evidence-miner -a cl
 npm run list
 npm run install:career-evidence-miner
 npm run install:resume-tailor
+npm run install:import-resume
 npm run install:all
 ```
 
@@ -264,6 +366,29 @@ npm run install:all
 3. 如果都不存在，向用户询问路径。
 
 Skill 不会假设某台机器上的固定路径。
+
+### career-vault.yaml
+
+需要多个 Vault 或私有项目时，可以复制仓库根目录的 `career-vault.example.yaml`：
+
+```yaml
+vaults:
+  - path: "D:\\work\\career-vault"
+    name: main
+  - path: "D:\\work\\private-career-vault"
+    name: private
+ignore_globs:
+  - ".obsidian/**"
+private_globs:
+  - "private/**"
+  - "**/*.private.md"
+resume:
+  language: zh-CN
+  max_pages: 1
+  job_family: backend
+```
+
+脚本支持重复传入 `--vault`，也支持 `--config career-vault.yaml`。`private_globs` 默认不参与扫描，只有显式 `--include-private` 才处理。
 
 ### 推荐的 Vault 结构
 
@@ -299,6 +424,23 @@ career-vault/
 [JD 内容]
 ```
 
+
+### 从旧简历建立初始 Vault
+
+```text
+使用 import-resume 导入 old-resume.md。
+把所有 claims 标记为待确认，生成项目草稿和证据缺口清单。
+不要把这些内容直接写成已验证的 production experience。
+```
+
+### 自动渲染一页简历
+
+```text
+使用 resume-tailor 读取我的职业资产库，根据下面的 JD 生成一版中文一页简历。
+选择 1 个主项目和最多 2 个辅项目，保留 evidence markers，并输出证据映射。
+[JD 内容]
+```
+
 ### 只更新一个项目案例
 
 ```text
@@ -323,7 +465,7 @@ career-vault/
 | C | 从结构推断，尚未确认 | `待确认`，不直接写入简历 |
 | D | 用户量、营收、QPS、效率提升、团队规模 | 必须有真实来源 |
 
-两个 Skill 都不会：
+这些 Skill 都不会：
 
 - 编造百分比和业务收益。
 - 把团队成果写成个人独立完成。
@@ -369,13 +511,14 @@ npx skills add ShallowRecall/personal-skills --list
 ```bash
 python -X utf8 <skill-creator>/scripts/quick_validate.py skills/career-evidence-miner
 python -X utf8 <skill-creator>/scripts/quick_validate.py skills/resume-tailor
+python -X utf8 <skill-creator>/scripts/quick_validate.py skills/import-resume
 ```
 
 ## 更新与卸载
 
 ```bash
-npx skills update career-evidence-miner resume-tailor -g -y
-npx skills remove career-evidence-miner resume-tailor -a codex -g -y
+npx skills update career-evidence-miner resume-tailor import-resume -g -y
+npx skills remove career-evidence-miner resume-tailor import-resume -a codex -g -y
 ```
 
 如果使用 Junction 开发模式，更新源文件后通过 Git 同步即可。
@@ -415,7 +558,7 @@ Skill 需要知道职业资产库的位置，但不应硬编码某台机器的�
 
 ## 版本与贡献
 
-当前版本：`1.1.0`
+当前版本：`1.2.0`
 
 欢迎提交新的职业资产模板、证据提取规则、简历写作模式、跨 Agent 安装与验证改进。
 
