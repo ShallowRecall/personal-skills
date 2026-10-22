@@ -13,5 +13,20 @@
     "install:career-evidence-miner": "npx --yes skills add . --skill career-evidence-miner -a codex -g -y",
     "install:resume-tailor": "npx --yes skills add . --skill resume-tailor -a codex -g -y",
     "link:local": "pwsh -NoProfile -File scripts/link-local.ps1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ShallowRecall/personal-skills.git"
+  },
+  "homepage": "https://github.com/ShallowRecall/personal-skills#readme",
+  "bugs": {
+    "url": "https://github.com/ShallowRecall/personal-skills/issues"
+  },
+  "keywords": [
+    "codex",
+    "agent-skills",
+    "career",
+    "resume",
+    "obsidian"
+  ]
 }

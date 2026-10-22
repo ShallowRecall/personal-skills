@@ -136,10 +136,10 @@ npx skills add ShallowRecall/personal-skills --skill resume-tailor -a codex -g -
 npx skills add --help
 ```
 
-然后替换 `-a codex`，例如：
+然后替换 `-a codex`，例如 `-a claude-code`：
 
 ```bash
-npx skills add ShallowRecall/personal-skills --skill career-evidence-miner -a claude -g -y
+npx skills add ShallowRecall/personal-skills --skill career-evidence-miner -a claude-code -g -y
 ```
 
 ### 使用仓库内 npm scripts
@@ -279,6 +279,8 @@ D:\workSpace\cerberus-app-subscribe，把最近的支付和订阅设计沉淀到
 ```bash
 npx skills update career-evidence-miner resume-tailor -g -y
 ```
+
+如果本机使用的是本文档中的 Junction 开发模式，更新源文件后执行 `git pull` 或 `git push` 即可；`npx skills update` 主要适用于通过 `npx skills add` 安装的副本。
 
 ### 卸载
 
