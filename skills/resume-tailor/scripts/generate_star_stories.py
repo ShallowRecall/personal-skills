@@ -28,20 +28,26 @@ def read_sections(text: str) -> dict[str, str]:
     return {key: "\n".join(value).strip() for key, value in sections.items()}
 
 
+def collect(sections: dict[str, str], *names: str) -> str:
+    parts = []
+    for key, value in sections.items():
+        if not value:
+            continue
+        low = key.lower()
+        if any(name.lower() in low for name in names):
+            parts.append(f"### {key}\n{value}")
+    return "\n\n".join(parts)
+
+
 def pick(sections: dict[str, str], *names: str) -> str:
-    low = {key.lower(): value for key, value in sections.items()}
-    for name in names:
-        for key, value in low.items():
-            if name.lower() in key and value:
-                return value
-    return ""
+    return collect(sections, *names)
 
 
 def build_story(title: str, sections: dict[str, str]) -> str:
-    background = pick(sections, "background", "背景")
-    contribution = pick(sections, "contribution", "贡献", "my contribution")
-    decisions = pick(sections, "decision", "设计决策", "key decisions")
-    bullets = pick(sections, "resume bullet", "简历 bullet", "bullets")
+    background = pick(sections, "background", "背景", "业务范围", "核心链路")
+    contribution = pick(sections, "contribution", "贡献", "核心贡献") or pick(sections, "亮点")
+    decisions = pick(sections, "decision", "设计决策", "关键设计") or pick(sections, "亮点")
+    bullets = pick(sections, "resume bullet", "简历 bullet", "简历", "bullet")
     evidence = pick(sections, "evidence", "证据", "sources")
     evidence_ids = sorted(set(EVIDENCE_RE.findall(evidence + "\n" + bullets)))
     return f'''---

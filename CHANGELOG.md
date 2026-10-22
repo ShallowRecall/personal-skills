@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1 — 2026-10-22
+
+- Improved STAR extraction for Chinese project headings and real vault structures.
+- Validated real-vault evidence migration at 0 errors and 0 warnings.
+- Validated real JD scoring, resume page fitting, STAR generation, and session capture.
+
 ## 1.2.0 — 2026-10-22
 
 ### Added
