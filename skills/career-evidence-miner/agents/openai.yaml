@@ -1,0 +1,5 @@
+interface:
+  display_name: "Career Evidence Miner"
+  short_description: "Mine local projects into evidence-backed career notes"
+policy:
+  allow_implicit_invocation: true

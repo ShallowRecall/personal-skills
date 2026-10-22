@@ -1,0 +1,5 @@
+interface:
+  display_name: "Resume Tailor"
+  short_description: "Build JD-targeted resumes from evidence-backed project notes"
+policy:
+  allow_implicit_invocation: true

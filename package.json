@@ -1,0 +1,17 @@
+{
+  "name": "shallowrecall-personal-skills",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Personal Codex skills for evidence-backed career notes and resume tailoring",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "list": "npx --yes skills add . --list",
+    "install:all": "npx --yes skills add . --skill \"*\" -a codex -g -y",
+    "install:career-evidence-miner": "npx --yes skills add . --skill career-evidence-miner -a codex -g -y",
+    "install:resume-tailor": "npx --yes skills add . --skill resume-tailor -a codex -g -y",
+    "link:local": "pwsh -NoProfile -File scripts/link-local.ps1"
+  }
+}
